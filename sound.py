@@ -1,12 +1,12 @@
-from importlib.resources import path
 import os
 import torch
+from random import randint
 
 
 def text_to_speech(text: str, path: str = "audio.wav", code: int = 0):
-    # TODO add different sound acting based on the code
     device = torch.device('cpu')
     torch.set_num_threads(4)
+    text += "."
     local_file = './models/model1.pt'
 
     if not os.path.isfile(local_file):
@@ -17,15 +17,16 @@ def text_to_speech(text: str, path: str = "audio.wav", code: int = 0):
         local_file).load_pickle("tts_models", "model")
     model.to(device)
     sample_rate = 48000
-    speakers = ['en_0']
-    if code >= len(speakers):
-        raise ValueError("Invalid code parameter")
 
+    if code >= 118:
+        raise ValueError("Invalid code parameter")
+    code = randint(0, 117)
     model.save_wav(audio_path=path,
                    text=text,
-                   speaker=speakers[code],
+                   speaker=f'en_{code}',
                    sample_rate=sample_rate)
 
 
 if __name__ == "__main__":
-    text_to_speech("lol")
+    text_to_speech(
+        "That is so fucking bad that I can't kick 😀😀  your ass..", code=112)
