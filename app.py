@@ -15,4 +15,10 @@ def get_voice():
     return send_file(f"data/{request.args['uuid']}.wav")
 
 
-app.run(host = config.IP, port = 4500, debug = True)
+@app.route('/get_shake')
+def get_shake():
+    return render_template('shake.html')
+
+
+app.run(host = '192.168.198.68', port=443, ssl_context='adhoc', debug = True)
+# app.run(host = config.IP, port=443, ssl_context='adhoc', debug = True)
