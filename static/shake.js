@@ -1,6 +1,6 @@
-let eps_a = 20;
-let aps_b = 20;
-let eps_y = 20;
+const EPS_A = 20;
+const EPS_B = 20;
+const EPS_Y = 20;
 
 let last_norm = 0;
 
@@ -23,7 +23,7 @@ function check_pos(event, a, b, y) {
     new_a = check_coordinate(event.alpha, a, 0, 359)
     new_b = check_coordinate(event.beta, b, 180, 359)
     new_y = check_coordinate(event.gamma, y, 90, 179)
-    return (new_a <= eps_a || a === -1) && (new_b <= aps_b || b === -1) && (new_y <= eps_y || y === -1);
+    return (new_a <= EPS_A || a === -1) && (new_b <= EPS_B || b === -1) && (new_y <= EPS_Y || y === -1);
 }
 
 var outputRed = document.querySelector('.outputRed');
@@ -38,14 +38,19 @@ window.addEventListener('deviceorientation', (event) => {
     
     if (check_pos(event, -1, 90, -1)) {
         last_norm = Date.now();
-        console.log("ys");
+        console.log("yes");
     }
-    else if (check_pos(event, -1, 179, 0)) {
-        if (Date.now() - last_norm <= 1000) {
+
+    else if (Date.now() - last_norm <= 1000) {
+        if (check_pos(event, -1, 179, 0)) {
             outputPos.innerHTML = "Anger";
             setTimeout(() => outputPos.innerHTML = '', 3000);
         }
-    }  
+        else if (check_pos(event, -1, 0, 0)) {
+            outputPos.innerHTML = "OK";
+            setTimeout(() => outputPos.innerHTML = '', 3000);
+        }
+    }
     
     
     prev_less_280 = false
@@ -59,7 +64,7 @@ window.addEventListener('deviceorientation', (event) => {
         cnt = 0
     }
 
-    if (cnt == 3) {
+    if (cnt == 5) {
         cnt = 0;
         outputPos.innerHTML = "Laugh";
         setTimeout(() => outputPos.innerHTML = '', 3000);
