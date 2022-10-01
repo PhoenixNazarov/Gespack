@@ -2,13 +2,14 @@ from dataclasses import dataclass
 import emoji
 import requests
 import text2emotion as te
-from tot_hacaton.sound import text_to_speech
+from sound import text_to_speech
+
 
 @dataclass
 class Message:
     def __init__(self, text: str, sound:int=-1) -> None:
-        self.emotion = message_to_code(text)  
-        self.voice = text_to_speech(text, sound, "test.wav") if sound != -1 else None
+        self.emotion = message_to_code(text)
+        self.voice = text_to_speech(text, "test.wav", sound) if sound != -1 else None
         self.text = text
         self.id = 0
     
