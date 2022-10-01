@@ -35,7 +35,7 @@ window.addEventListener('deviceorientation', (event) => {
     outputRed.innerHTML = Math.floor(event.alpha);
     outputGreen.innerHTML = Math.floor(event.gamma);
     outputBlue.innerHTML = Math.floor(event.beta);
-    prev_less_360 = false
+    
     if (check_pos(event, -1, 90, -1)) {
         last_norm = Date.now();
         console.log("ys");
@@ -46,13 +46,13 @@ window.addEventListener('deviceorientation', (event) => {
             setTimeout(() => outputPos.innerHTML = '', 3000);
         }
     }  
-
-    new_a = event.alpha + 180
     
-    if (new_a > 280 && prev_less_280) {
+    
+    prev_less_280 = false
+    if (event.alpha > 280 && prev_less_280) {
         prev_less_280 = false
         cnt += 1
-    } else if (new_a < 50) {
+    } else if (event.alpha < 50) {
         prev_less_280 = true
         cnt += 1
     } else {
