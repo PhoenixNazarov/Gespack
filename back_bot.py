@@ -9,7 +9,7 @@ from text_emoji import message_to_code
 
 new_messages = []
 
-ws = websocket.create_connection(f"ws://{config.IP}:5000")
+ws = websocket.create_connection(f"wss://{config.IP}:5000")
 
 
 class BackgroundBot:
@@ -23,7 +23,12 @@ class BackgroundBot:
             if _new_messages:
                 _message = _new_messages[-1]
                 if _message['type'] == 'new_message':
-                    self.send_response({'type': 'change_color', 'color': message_to_code(_message['text']), 'save': 1})
+                    if _message['text'] == 'hahaha':
+                        self.send_response(
+                            {'type': 'drop_emoji', 'emoji': '😀'})
+                    else:
+                        self.send_response(
+                            {'type': 'change_color', 'color': message_to_code(_message['text']), 'save': 1})
 
             time.sleep(0.1)
 

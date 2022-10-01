@@ -59,7 +59,7 @@ async def echo(websocket):
             for i in ks:
                 wss.pop(i)
 
-        elif data['type'] == 'change_color':
+        elif data['type'] in ['change_color', 'drop_emoji']:
             for i in wss.values():
                 try:
                     await i.send(message)

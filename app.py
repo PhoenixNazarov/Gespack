@@ -20,5 +20,5 @@ def get_shake():
     return render_template('shake.html')
 
 
-app.run(host = '192.168.198.68', port=443, ssl_context='adhoc', debug = True)
+app.run(host = '192.168.43.135', port=443, ssl_context='adhoc')
 # app.run(host = config.IP, port=443, ssl_context='adhoc', debug = True)
