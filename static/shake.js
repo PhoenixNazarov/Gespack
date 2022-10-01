@@ -3,6 +3,7 @@ const EPS_B = 20;
 const EPS_Y = 20;
 
 let last_norm = 0;
+let prev_less_280 = false
 
 class Motion {
     constructor(code, x, y, z) {
@@ -40,7 +41,6 @@ window.addEventListener('deviceorientation', (event) => {
         last_norm = Date.now();
         console.log("yes");
     }
-
     else if (Date.now() - last_norm <= 1000) {
         if (check_pos(event, -1, 179, 0)) {
             outputPos.innerHTML = "Anger";
@@ -53,11 +53,11 @@ window.addEventListener('deviceorientation', (event) => {
     }
     
     
-    prev_less_280 = false
-    if (event.alpha > 280 && prev_less_280) {
+    
+    if (event.alpha > 280 && prev_less_280 && (Date.now() - last_norm <= 2000)) {
         prev_less_280 = false
         cnt += 1
-    } else if (event.alpha < 50 && !prev_less_280) {
+    } else if (event.alpha < 50 && (!prev_less_280) && (Date.now() - last_norm <= 2000)) {
         prev_less_280 = true
         cnt += 1
     } else {
