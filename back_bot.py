@@ -1,44 +1,60 @@
-import asyncio
-from websockets import connect
-import threading
 import json
+import threading
+import time
 
+import websocket
 
-class BotResponse:
-    background_change = ''
-    background_emotion = ''
+import config
+from text_emoji import message_to_code
 
+new_messages = []
 
-async def hello(uri):
-    async with connect(uri) as websocket:
-        await websocket.send("Hello world!")
-        while 1:
-            print(await websocket.recv())
-
-
-asyncio.run(hello("ws://192.168.110.206:5000"))
+ws = websocket.create_connection(f"ws://{config.IP}:5000")
 
 
 class BackgroundBot:
-    def __init__(self, new_messages):
-        self.new_messages = new_messages  # stack with new messages
-        self.message_history = []
+    def __init__(self):
+        self.local_history = ''
 
     def process(self):
+        print('bot was started')
         while 1:
-            send_response()
-            last_new_message = 0
-            if 10 > last_new_message:
-                send_response()
+            _new_messages = self.check_new_message()
+            if _new_messages:
+                _message = _new_messages[-1]
+                if _message['type'] == 'new_message':
+                    self.send_response({'type': 'change_color', 'color': message_to_code(_message['text']), 'save': 1})
 
+            time.sleep(0.1)
 
-    def create_response(self):
-        pass
-
-    def send_response(self):
-        # socket send BotResponse
-        pass
+    def send_response(self, data):
+        ws.send(json.dumps(data))
+        # ws
+        # send_messages.append(data)
 
     def check_new_message(self):
-        # new_messages
-        pass
+        global new_messages
+        if len(new_messages) != 0:
+            my_message = new_messages.copy()
+            new_messages = []
+            return my_message
+
+
+def start_loader():
+    ws.send('{"type": "new_user"}')
+    while 1:
+        result = ws.recv()
+        print('new message', result)
+        try:
+            new_messages.append(json.loads(result))
+        except:
+            pass
+
+
+def start_process():
+    BackgroundBot().process()
+
+
+if __name__ == '__main__':
+    threading.Thread(target = start_process).start()
+    start_loader()
