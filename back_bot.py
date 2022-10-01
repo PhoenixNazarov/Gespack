@@ -56,5 +56,10 @@ def start_process():
 
 
 if __name__ == '__main__':
-    threading.Thread(target = start_process).start()
-    start_loader()
+    try:
+        threading.Thread(target = start_process).start()
+        start_loader()
+    except:
+        pass
+    finally:
+        ws.close()

@@ -5,6 +5,7 @@ import datetime
 import config
 import websockets
 from websockets import serve
+from text_emoji import text_to_speech
 
 wss = {}
 
@@ -25,13 +26,11 @@ async def echo(websocket):
         elif data['type'] == 'new_message':
             user = data['user']
             text = data['text']
-
             ks = []
-
             for k, i in wss.items():
                 try:
                     await i.send(json.dumps({'type': 'new_message', 'user': user, 'text': text,
-                                             'date': datetime.datetime.now().strftime('%H:%m')}))
+                                             'date': datetime.datetime.now().strftime('%H:%M')}))
                 except websockets.exceptions.ConnectionClosedError:
                     ks.append(k)
                 except websockets.exceptions.ConnectionClosedOK:
@@ -40,6 +39,25 @@ async def echo(websocket):
             for i in ks:
                 wss.pop(i)
 
+        elif data['type'] == 'new_voice':
+            user = data['user']
+            text = data['text']
+
+            uid = uuid.uuid4()
+            text_to_speech(text, f'data/{str(uid)}.wav')
+
+            ks = []
+            for k, i in wss.items():
+                try:
+                    await i.send(json.dumps({'type': 'new_voice', 'user': user, 'uuid': str(uid),
+                                             'date': datetime.datetime.now().strftime('%H:%M')}))
+                except websockets.exceptions.ConnectionClosedError:
+                    ks.append(k)
+                except websockets.exceptions.ConnectionClosedOK:
+                    ks.append(k)
+
+            for i in ks:
+                wss.pop(i)
 
         elif data['type'] == 'change_color':
             for i in wss.values():
