@@ -5,7 +5,9 @@ const rangeForHeight = 500;
 const time = 100;
 const timeForReset = 3000;
 const minimalWidthPath = 300;
-const minimalHeightPath = 0;
+const minimalHeightPath = 150;
+const coef1 = 0.5;
+const coef2 = 2;
 
 let oldTime = performance.now()
 let newTime
@@ -21,6 +23,11 @@ let maxX = 0;
 let minX = window.outerWidth;
 let maxY = 0;
 let minY = window.outerHeight;
+
+function getTanDeg(deg) {
+  var rad = deg * Math.PI/180;
+  return Math.tan(rad);
+}
 
 function anulatorX() {
     maxX = 0;
@@ -48,13 +55,15 @@ function getMouseDirection(e) {
         return;
     }
     if (newTime - oldTime > time) {
-        if (2 > Math.abs((oldY - newY)/(oldX - newX)) && Math.abs((oldY - newY)/(oldX - newX)) > 0.5) {
+        if (coef2 > Math.abs((oldY - newY)/(oldX - newX)) && Math.abs((oldY - newY)/(oldX - newX)) > coef1) {
             anulatorY();
             anulatorX();
             return;
         }
         if (horizontalCount === maxCount) {
-            if (maxX - minX > minimalWidthPath && maxY - minY < rangeForHeight && newTime - oldTime < time * maxCount * 2) {
+            if (Math.abs(maxX - minX) > minimalWidthPath &&
+                Math.abs(maxY - minY) < rangeForHeight &&
+                newTime - oldTime < time * maxCount * 4) {
                 console.log("BOOBA GOES RIGHT AND LEFT");
             }
             anulatorY();
@@ -63,7 +72,9 @@ function getMouseDirection(e) {
         }
         if (verticalCount === maxCount) {
             // console.log("THE FUCK " + (maxX - minX) + " " + rangeForWidth + " " + (newTime - oldTime))
-            if (maxX - minX < rangeForWidth && newTime - oldTime < time * maxCount * 4) {
+            if (Math.abs(maxY - minY) > minimalHeightPath &&
+                Math.abs(maxX - minX) < rangeForWidth &&
+                newTime - oldTime < time * maxCount * 4) {
                 console.log("BOOBA GOES UP AND DOWN");
             }
             anulatorX();
