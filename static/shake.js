@@ -5,27 +5,18 @@ let eps_y = 20;
 
 let last_norm = 0;
 
+function check_coordinate(x, y, add, range) {
+    mn = Math.min(x, y) + add;
+    mx = Math.max(x, y) + add;
+    return Math.min(mx - mn, mn + (range - mx));    
+}
 
 function check_pos(event, a, b, y) {
-    mn = Math.min(event.alpha, a);
-    mx = Math.max(event.alpha, a);
-    r1 = mn + (359 - mx);
-    r2 = mx - mn;
-    r_a = Math.min(r1, r2);
+    new_a = check_coordinate(event.alpha, a, 0, 359)
+    new_b = check_coordinate(event.beta, b, 180, 359)
+    new_y = check_coordinate(event.gamma, y, 90, 179)
 
-    mn = Math.min(event.beta, b) + 180;
-    mx = Math.max(event.beta, b) + 180;
-    r1 = mn + (359 - mx);
-    r2 = mx - mn;
-    r_b = Math.min(r1, r2);
-
-    mn = Math.min(event.gamma, y) + 90;
-    mx = Math.max(event.gamma, y) + 90;
-    r1 = mn + (179 - mx);
-    r2 = mx - mn;
-    r_y = Math.min(r1, r2);
-
-    return (r_a <= eps_a || a === -1) && (r_b <= aps_b || b === -1) && (r_y <= eps_y || y === -1);
+    return (new_a <= eps_a || a === -1) && (new_b <= aps_b || b === -1) && (new_y <= eps_y || y === -1);
 }
 
 var outputRed = document.querySelector('.outputRed');
