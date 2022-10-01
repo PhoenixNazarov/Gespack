@@ -54,10 +54,10 @@ window.addEventListener('deviceorientation', (event) => {
     
     
     
-    if (event.alpha > 280 && prev_less_280 && (Date.now() - last_norm <= 2000)) {
+    if (event.alpha > 250 && prev_less_280 && (Date.now() - last_norm <= 2000)) {
         prev_less_280 = false
         cnt += 1
-    } else if (event.alpha < 50 && (!prev_less_280) && (Date.now() - last_norm <= 2000)) {
+    } else if (event.alpha < 90 && (!prev_less_280) && (Date.now() - last_norm <= 2000)) {
         prev_less_280 = true
         cnt += 1
     } else {
