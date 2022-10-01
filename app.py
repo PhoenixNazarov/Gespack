@@ -25,4 +25,4 @@ def get_message():
     return message.emotion
 
 
-app.run(host = 'localhost', port = 81, debug = True)
+app.run(host = '192.168.110.206', port = 888, debug = True)

@@ -1,6 +1,22 @@
+import asyncio
+from websockets import connect
+import threading
+import json
+
+
 class BotResponse:
     background_change = ''
     background_emotion = ''
+
+
+async def hello(uri):
+    async with connect(uri) as websocket:
+        await websocket.send("Hello world!")
+        while 1:
+            print(await websocket.recv())
+
+
+asyncio.run(hello("ws://192.168.110.206:5000"))
 
 
 class BackgroundBot:
