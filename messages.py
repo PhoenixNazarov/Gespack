@@ -2,7 +2,7 @@ import asyncio
 import json
 import uuid
 import datetime
-
+import config
 import websockets
 from websockets import serve
 
@@ -11,7 +11,6 @@ wss = {}
 
 async def echo(websocket):
     async for message in websocket:
-        print('new_message', message)
         try:
             data = json.loads(message.replace("'", '"'))
         except:
@@ -27,16 +26,31 @@ async def echo(websocket):
             user = data['user']
             text = data['text']
 
-            for i in wss.values():
+            ks = []
+
+            for k, i in wss.items():
                 try:
                     await i.send(json.dumps({'type': 'new_message', 'user': user, 'text': text,
                                              'date': datetime.datetime.now().strftime('%H:%m')}))
+                except websockets.exceptions.ConnectionClosedError:
+                    ks.append(k)
+                except websockets.exceptions.ConnectionClosedOK:
+                    ks.append(k)
+
+            for i in ks:
+                wss.pop(i)
+
+
+        elif data['type'] == 'change_color':
+            for i in wss.values():
+                try:
+                    await i.send(message)
                 except websockets.exceptions.ConnectionClosedOK:
                     pass
 
 
 async def main():
-    async with serve(echo, "192.168.110.206", 5000):
+    async with serve(echo, config.IP, 5000):
         await asyncio.Future()
 
 

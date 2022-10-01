@@ -4,7 +4,7 @@ const smoothScroll = (element) => {
     }, 500);
 }
 
-let socket = new WebSocket("ws://127.0.0.1:5000");
+let socket = new WebSocket("ws://192.168.198.68:5000");
 let my_name = '';
 let chat_content = $('#chat-content');
 let chat_input = $('#text_input');
@@ -27,7 +27,7 @@ socket.onmessage = function (event) {
         } else {
             add_my_message(data['text'], data['date'])
         }
-    } else if (data['type'] === 'new_color') {
+    } else if (data['type'] === 'change_color') {
         change_color(data['color']);
     }
 
