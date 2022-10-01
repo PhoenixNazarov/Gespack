@@ -52,7 +52,7 @@ window.addEventListener('deviceorientation', (event) => {
     if (event.alpha > 280 && prev_less_280) {
         prev_less_280 = false
         cnt += 1
-    } else if (event.alpha < 50) {
+    } else if (event.alpha < 50 && !prev_less_280) {
         prev_less_280 = true
         cnt += 1
     } else {
