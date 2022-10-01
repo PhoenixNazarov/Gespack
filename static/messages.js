@@ -4,8 +4,9 @@ const smoothScroll = (element) => {
     }, 500);
 }
 
-let socket = new WebSocket("ws://192.168.198.68:5000");
+let socket = new WebSocket("ws://localhost:5000");
 let my_name = '';
+let last_name = '';
 let chat_content = $('#chat-content');
 let chat_input = $('#text_input');
 
@@ -22,17 +23,26 @@ socket.onmessage = function (event) {
     if (data['type'] === 'set_name') {
         my_name = data['name'];
     } else if (data['type'] === 'new_message') {
+        check_last_name(data['user']);
         if (data['user'] !== my_name) {
             add_message(data['text'], data['date']);
         } else {
             add_my_message(data['text'], data['date'])
         }
+    } else if (data['type'] === 'new_voice') {
+        playSound(data['uuid']);
     } else if (data['type'] === 'change_color') {
         change_color(data['color']);
     }
 
 };
 
+function check_last_name(current_name) {
+    if (last_name === current_name) {
+        $('.meta').last().remove();
+    }
+    last_name = current_name;
+}
 
 function add_my_message(text, date) {
     chat_content.append(
@@ -67,15 +77,28 @@ function add_message(text, date) {
     smoothScroll(chat_content);
 }
 
+function playSound(uuid) {
+    let a = new Audio('/voice?uuid=' + uuid);
+    a.play();
+}
+
 
 function send_message() {
     let text = chat_input.val();
+    if (text === ' ' || text === '') {
+        return;
+    }
     chat_input.val('');
     socket.send(JSON.stringify({"type": "new_message", "user": my_name, "text": text}));
 }
 
-function send_message_answer(data) {
-    change_color(data);
+function send_voice() {
+    let text = chat_input.val();
+    if (text === ' ' || text === '') {
+        return;
+    }
+    chat_input.val('');
+    socket.send(JSON.stringify({"type": "new_voice", "user": my_name, "text": text}));
 }
 
 
@@ -101,11 +124,7 @@ function change_color(color) {
     set_color(color);
 }
 
-
-function emotion_angry() {
-    show_color('red', 0.5);
-}
-
+$("#send_voice").bind('click', send_voice);
 $("#send_message").bind('click', send_message);
 $(document).keypress(function (e) {
     if (e.which === 13) {

@@ -17,11 +17,10 @@ def text_to_speech(text: str, path: str = "audio.wav", code: int = 0):
         local_file).load_pickle("tts_models", "model")
     model.to(device)
     sample_rate = 48000
-    
+    speakers = ['en_0']
     if code >= len(speakers):
         raise ValueError("Invalid code parameter")
 
-    speakers = ['en_0']
     model.save_wav(audio_path=path,
                    text=text,
                    speaker=speakers[code],
