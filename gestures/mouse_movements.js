@@ -1,14 +1,17 @@
 //All settings
-const maxCount = 6;
-const rangeForWidth = 800;
-const rangeForHeight = 500;
-const time = 100;
-const timeForReset = 3000;
-const minimalWidthPath = 300;
-const minimalHeightPath = 150;
-const coef1 = 0.5;
-const coef2 = 2;
-
+import * as config from './config.json';
+let defaultConfig = {
+    maxCount: 6,
+    rangeForWidth: 800,
+    rangeForHeight: 500,
+    time: 100,
+    timeForReset: 3000,
+    minimalWidthPath: 300,
+    minimalHeightPath: 150,
+    coef1: 0.5,
+    coef2: 2,
+}
+Object.setPrototypeOf(config, defaultConfig)
 let oldTime = performance.now()
 let newTime
 let oldX = 0;
@@ -25,7 +28,7 @@ let maxY = 0;
 let minY = window.outerHeight;
 
 function getTanDeg(deg) {
-  var rad = deg * Math.PI/180;
+  let rad = deg * Math.PI/180;
   return Math.tan(rad);
 }
 
@@ -47,35 +50,36 @@ function getMouseDirection(e) {
     newTime = performance.now()
     newX = e.pageX;
     newY = e.pageY;
-    if (newTime - oldTime > timeForReset) {
+    if (newTime - oldTime > config.timeForReset) {
         anulatorX();
         anulatorY();
         anulatorCounter();
         oldTime = newTime;
         return;
     }
-    if (newTime - oldTime > time) {
-        if (coef2 > Math.abs((oldY - newY)/(oldX - newX)) && Math.abs((oldY - newY)/(oldX - newX)) > coef1) {
+    if (newTime - oldTime > config.time) {
+        if (config.coef2 > Math.abs((oldY - newY)/(oldX - newX)) && Math.abs((oldY - newY)/(oldX - newX)) > config.coef1) {
             anulatorY();
             anulatorX();
             anulatorCounter();
             return;
         }
-        if (horizontalCount === maxCount) {
-            if (Math.abs(maxX - minX) > minimalWidthPath &&
-                Math.abs(maxY - minY) < rangeForHeight &&
-                newTime - oldTime < time * maxCount * 4) {
+        if (horizontalCount === config.maxCount) {
+            if (Math.abs(maxX - minX) > config.minimalWidthPath &&
+                Math.abs(maxY - minY) < config.rangeForHeight &&
+                newTime - oldTime < config.time * config.maxCount * 4) {
+                // HERE PUT CODE FOR FIRST GESTURE RIGHT AND LEFT
                 console.log("BOOBA GOES RIGHT AND LEFT");
             }
             anulatorY();
             anulatorX();
             anulatorCounter();
         }
-        if (verticalCount === maxCount) {
-            // console.log("THE FUCK " + (maxX - minX) + " " + rangeForWidth + " " + (newTime - oldTime))
-            if (Math.abs(maxY - minY) > minimalHeightPath &&
-                Math.abs(maxX - minX) < rangeForWidth &&
-                newTime - oldTime < time * maxCount * 4) {
+        if (verticalCount === config.maxCount) {
+            if (Math.abs(maxY - minY) > config.minimalHeightPath &&
+                Math.abs(maxX - minX) < config.rangeForWidth &&
+                newTime - oldTime < config.time * config.maxCount * 4) {
+                // HERE PUT CODE FOR SECOND GESTURE UP AND DOWN
                 console.log("BOOBA GOES UP AND DOWN");
             }
             anulatorX();
