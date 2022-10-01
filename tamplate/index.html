@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Чат бот</title>
+  <link rel="stylesheet" href="static/custom-style.css">
+  <script src="https://kit.fontawesome.com/c1802e4220.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="page-content page-container" id="page-content">
+  <div class="padding">
+    <div class="row container d-flex justify-content-center">
+      <div class="col-md-6">
+        <div class="card card-bordered">
+          <div class="card-header">
+            <h4 class="card-title"><strong>Chat</strong></h4>
+            <a class="btn btn-xs btn-secondary" href="#" data-abc="true">Let's Chat App</a>
+          </div>
+
+          <div class="ps-container ps-theme-default ps-active-y" id="chat-content">
+            <div class="media media-chat media-chat-reverse">
+              <div class="media-body">
+                <p>Hiii, I'm good.</p>
+                <p>How are you doing?</p>
+                <p>Long time no see! Tomorrow office. will be free on sunday.</p>
+                <p class="meta">
+                  <time datetime="2018">00:06</time>
+                </p>
+              </div>
+            </div>
+
+            <div class="media media-chat">
+              <img class="avatar avatar-xs" src="https://img.icons8.com/color/36/000000/administrator-male.png"
+                   alt="...">
+              <div class="media-body">
+                <p>Okay</p>
+                <p>We will go on sunday? </p>
+                <p class="meta">
+                  <time datetime="2018">00:07</time>
+                </p>
+              </div>
+            </div>
+
+            <div class="media media-chat media-chat-reverse">
+              <div class="media-body">
+                <p>That's awesome!</p>
+                <p>I will meet you Sandon Square sharp at 10 AM</p>
+                <p>Is that okay?</p>
+                <p class="meta">
+                  <time datetime="2018">00:09</time>
+                </p>
+              </div>
+            </div>
+
+            <div class="media media-chat">
+              <img class="avatar avatar-xs" src="https://img.icons8.com/color/36/000000/administrator-male.png"
+                   alt="...">
+
+              <div class="media-body">
+                <p>Okay i will meet you on Sandon Square </p>
+                <p class="meta">
+                  <time datetime="2018">00:10</time>
+                </p>
+              </div>
+            </div>
+
+            <div class="media media-chat media-chat-reverse">
+              <div class="media-body">
+                <p>Do you have pictures of Matley Marriage?</p>
+                <p class="meta">
+                  <time datetime="2018">00:10</time>
+                </p>
+              </div>
+            </div>
+
+            <div class="media media-chat">
+              <img class="avatar avatar-xs" src="https://img.icons8.com/color/36/000000/administrator-male.png"
+                   alt="...">
+
+              <div class="media-body">
+                <p>Sorry I don't have. i changed my phone.</p>
+                <p class="meta">
+                  <time datetime="2018">00:12</time>
+                </p>
+              </div>
+            </div>
+
+            <div class="media media-chat media-chat-reverse">
+              <div class="media-body">
+                <p>Okay then see you on sunday!!</p>
+                <p class="meta">
+                  <time datetime="2018">00:12</time>
+                </p>
+              </div>
+            </div>
+
+            <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
+              <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+            </div>
+            <div class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;">
+              <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div>
+            </div>
+          </div>
+
+          <div class="publisher bt-1 border-light">
+            <input id="text_input" class="publisher-input" type="text" placeholder="Write something">
+            <span class="publisher-btn file-group">
+                  <i class="fa fa-paperclip file-browser"></i>
+                  <input type="file">
+                </span>
+            <a class="publisher-btn" data-abc="true"><i class="fa fa-smile"></i></a>
+            <a class="publisher-btn text-info" id="send_message" data-abc="true"><i class="fa fa-paper-plane"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+    function send_message() {
+        let text = $('#text_input').val();
+        $('#text_input').val('');
+        $.ajax({
+            type: "POST",
+            url: 'send_message',
+            success: send_message_answer,
+            data: {'text': text},
+        });
+        add_my_message(text, 0);
+    }
+
+    function send_message_answer(data) {
+        change_color(data);
+    }
+
+    chat_content = $('#chat-content');
+
+    const smoothScroll = (id) => {
+			const element = $(`#${id}`);
+			element.stop().animate({
+				scrollTop: element.prop("scrollHeight")
+			}, 500);
+		}
+
+    function add_my_message(text, date) {
+      chat_content.append(
+          `
+          <div class="media media-chat media-chat-reverse">
+              <div class="media-body">
+                <p>${text}</p>
+                <p class="meta">
+                  <time datetime="2018">${date}</time>
+                </p>
+              </div>
+          </div>
+          `
+      );
+      smoothScroll('chat-content');
+    }
+
+    function current_color() {
+        return chat_content.css('background-color');
+    }
+
+    function set_color(color) {
+        chat_content.css('background-color', color);
+    }
+
+    let c_color = current_color();
+
+    function show_color(color, time) {
+        chat_content.css('transition', time + 's');
+        set_color(color);
+        setTimeout(() => set_color(c_color), time * 1000);
+    }
+
+    function change_color(color) {
+        c_color = color;
+        chat_content.css('transition', '10s');
+        set_color(color);
+    }
+
+
+    function emotion_angry() {
+        show_color('red', 0.5);
+    }
+
+    $("#send_message").bind('click', send_message);
+    $(document).keypress(function(e){
+        if (e.which === 13){
+            $("#send_message").click();
+        }
+    });
+
+</script>
+</body>
+</html>
