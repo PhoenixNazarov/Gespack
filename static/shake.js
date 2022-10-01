@@ -60,10 +60,12 @@ window.addEventListener('deviceorientation', (event) => {
     } else if (event.alpha < 90 && (!prev_less_280) && (Date.now() - last_norm <= 2000)) {
         prev_less_280 = true
         cnt += 1
-    } else {
-        cnt = 0
+    } 
+    else {
+        if (Date.now() - last_norm > 2000) {
+            cnt = 0;
+        }
     }
-
     if (cnt == 5) {
         cnt = 0;
         outputPos.innerHTML = "Laugh";
