@@ -9,7 +9,7 @@ from sound import text_to_speech
 class Message:
     def __init__(self, text: str, sound:int=-1) -> None:
         self.emotion = message_to_code(text)
-        self.voice = text_to_speech(text, "test.wav", sound) if sound != -1 else None
+        self.voice = text_to_speech(text, "test.wav") if sound != -1 else None
         self.text = text
         self.id = 0
     
