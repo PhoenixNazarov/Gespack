@@ -58,6 +58,7 @@ function getMouseDirection(e) {
         if (coef2 > Math.abs((oldY - newY)/(oldX - newX)) && Math.abs((oldY - newY)/(oldX - newX)) > coef1) {
             anulatorY();
             anulatorX();
+            anulatorCounter();
             return;
         }
         if (horizontalCount === maxCount) {
