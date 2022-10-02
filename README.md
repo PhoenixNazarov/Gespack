@@ -15,6 +15,15 @@
 - тимлиды
 - Senior-разработчики
 
+## Настройка и запуск
+Для запуска нужно указать ip для сервера в `config.py`, настроить ssl сертификаты
+в `private`, заменить ip в файле `static/messages.js`
+
+1. Запустить `app.py`
+2. Запустить `websocket_server.py`
+3. Запустить `websocket_bot.py`
+4. Открыть сайт, который вывел скрипт app.py
+
 ## Ключи [конфига](https://github.com/PhoenixNazarov/tot_hacaton/blob/master/gestures/config.json) для настройки жестов под web страницу
 Ключ | Описание
 :---:|:---:

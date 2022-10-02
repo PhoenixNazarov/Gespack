@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-import text2emotion as te
+from lib import text2emotion as te
 from sound import text_to_speech
-import emoji
 
 
 @dataclass

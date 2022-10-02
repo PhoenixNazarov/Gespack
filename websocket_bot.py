@@ -6,7 +6,7 @@ import time
 import websocket
 
 import config
-from text_emoji import message_to_code
+from utils.text_emoji import message_to_code
 
 new_messages = []
 

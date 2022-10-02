@@ -6,7 +6,7 @@ import datetime
 import config
 import websockets
 from websockets import serve
-from text_emoji import text_to_speech
+from utils.text_emoji import text_to_speech
 
 wss = {}
 

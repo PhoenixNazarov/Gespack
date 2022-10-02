@@ -7,7 +7,7 @@ def text_to_speech(text: str, path: str = "audio.wav", code: int = 0):
     device = torch.device('cpu')
     torch.set_num_threads(4)
     text += "."
-    local_file = './models/model1.pt'
+    local_file = '../models/model1.pt'
 
     if not os.path.isfile(local_file):
         torch.hub.download_url_to_file('https://models.silero.ai/models/tts/en/v3_en.pt',
