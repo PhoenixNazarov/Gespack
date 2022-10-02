@@ -30,6 +30,10 @@ class BackgroundBot:
                     else:
                         self.send_response(
                             {'type': 'change_color', 'color': message_to_code(_message['text']), 'save': 1})
+                elif _message['type'] == 'new_sticker':
+                    self.send_response(
+                        {'type': 'change_color', 'color': message_to_code(_message['sticker']), 'save': 1})
+
 
             time.sleep(0.1)
 
