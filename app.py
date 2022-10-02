@@ -19,6 +19,7 @@ def get_voice():
 def get_shake():
     return render_template('shake.html')
 
+# app.run(host = config.IP, port=4500)
 
-app.run(host = '192.168.43.135', port=443, ssl_context='adhoc')
+app.run(host = config.IP, port=443, ssl_context=('selfsigned.crt', 'selfsigned.key'))
 # app.run(host = config.IP, port=443, ssl_context='adhoc', debug = True)

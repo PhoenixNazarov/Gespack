@@ -1,4 +1,5 @@
 import json
+import ssl
 import threading
 import time
 
@@ -9,7 +10,7 @@ from text_emoji import message_to_code
 
 new_messages = []
 
-ws = websocket.create_connection(f"wss://{config.IP}:5000")
+ws = websocket.create_connection(f"wss://{config.IP}:5000", sslopt = {'cert_reqs': ssl.CERT_NONE})
 
 
 class BackgroundBot:

@@ -1,5 +1,6 @@
 import asyncio
 import json
+import ssl
 import uuid
 import datetime
 import config
@@ -8,6 +9,10 @@ from websockets import serve
 from text_emoji import text_to_speech
 
 wss = {}
+
+
+ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+ssl_context.load_cert_chain('selfsigned.crt', keyfile='selfsigned.key')
 
 
 async def echo(websocket):
@@ -68,7 +73,7 @@ async def echo(websocket):
 
 
 async def main():
-    async with serve(echo, config.IP, 5000):
+    async with serve(echo, config.IP, 5000, ssl = ssl_context):
         await asyncio.Future()
 
 

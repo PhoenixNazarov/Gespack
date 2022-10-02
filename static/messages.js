@@ -4,7 +4,7 @@ const smoothScroll = (element) => {
     }, 500);
 }
 
-let socket = new WebSocket("wss://192.168.43.135:5000");
+let socket = new WebSocket("wss://192.168.198.68:5000/");
 let my_name = '';
 let last_name = '';
 let chat_content = $('#chat-content');
