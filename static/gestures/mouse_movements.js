@@ -1,5 +1,9 @@
 //All settings
-import * as config from './config.json';
+config = {
+    "maxCount": 5,
+    'minimalWidthPath': 150
+}
+
 let defaultConfig = {
     maxCount: 6,
     rangeForWidth: 800,
@@ -20,7 +24,7 @@ let newX, newY;
 let isItRight = false;
 let isItUp = false;
 
-let horizontalCount= 0;
+let horizontalCount = 0;
 let verticalCount = 0;
 let maxX = 0;
 let minX = window.outerWidth;
@@ -28,8 +32,8 @@ let maxY = 0;
 let minY = window.outerHeight;
 
 function getTanDeg(deg) {
-  let rad = deg * Math.PI/180;
-  return Math.tan(rad);
+    let rad = deg * Math.PI / 180;
+    return Math.tan(rad);
 }
 
 function anulatorX() {
@@ -41,10 +45,12 @@ function anulatorY() {
     maxY = 0;
     minY = window.outerHeight;
 }
+
 function anulatorCounter() {
     horizontalCount = 0;
     verticalCount = 0;
 }
+
 function getMouseDirection(e) {
     //deal with the horizontal case
     newTime = performance.now()
@@ -58,7 +64,7 @@ function getMouseDirection(e) {
         return;
     }
     if (newTime - oldTime > config.time) {
-        if (config.coef2 > Math.abs((oldY - newY)/(oldX - newX)) && Math.abs((oldY - newY)/(oldX - newX)) > config.coef1) {
+        if (config.coef2 > Math.abs((oldY - newY) / (oldX - newX)) && Math.abs((oldY - newY) / (oldX - newX)) > config.coef1) {
             anulatorY();
             anulatorX();
             anulatorCounter();
@@ -68,7 +74,14 @@ function getMouseDirection(e) {
             if (Math.abs(maxX - minX) > config.minimalWidthPath &&
                 Math.abs(maxY - minY) < config.rangeForHeight &&
                 newTime - oldTime < config.time * config.maxCount * 4) {
+
                 // HERE PUT CODE FOR FIRST GESTURE RIGHT AND LEFT
+                window.wss.send(JSON.stringify({
+                    "type": "new_motion",
+                    "user": my_name,
+                    "emotion": "positive",
+                    "device": "pc"
+                }));
                 console.log("BOOBA GOES RIGHT AND LEFT");
             }
             anulatorY();
@@ -79,7 +92,14 @@ function getMouseDirection(e) {
             if (Math.abs(maxY - minY) > config.minimalHeightPath &&
                 Math.abs(maxX - minX) < config.rangeForWidth &&
                 newTime - oldTime < config.time * config.maxCount * 4) {
+
                 // HERE PUT CODE FOR SECOND GESTURE UP AND DOWN
+                window.wss.send(JSON.stringify({
+                    "type": "new_motion",
+                    "user": my_name,
+                    "emotion": "negative",
+                    "device": "pc"
+                }));
                 console.log("BOOBA GOES UP AND DOWN");
             }
             anulatorX();

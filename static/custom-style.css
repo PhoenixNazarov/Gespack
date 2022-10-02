@@ -471,3 +471,7 @@ button, input, optgroup, select, textarea {
     margin: 0 !important;
     bottom: 5px;
 }
+
+.my-sticker {
+    font-size: 50px;
+}

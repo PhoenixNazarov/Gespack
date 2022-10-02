@@ -64,6 +64,39 @@ async def echo(websocket):
             for i in ks:
                 wss.pop(i)
 
+        elif data['type'] == 'new_motion':
+            user = data['user']
+            emotion = data['emotion']
+            sticker = '🌫️'
+
+            # pc
+            if emotion == 'positive':
+                sticker = '😀'
+            elif emotion == 'negative':
+                sticker = '🤐'
+
+            # mobile
+            elif emotion == 'anger':
+                sticker = '😬'
+            elif emotion == 'smile':
+                sticker = '😍'
+            elif emotion == 'ok':
+                sticker = '😚'
+
+
+            ks = []
+            for k, i in wss.items():
+                try:
+                    await i.send(json.dumps({'type': 'new_sticker', 'user': user, 'sticker': sticker,
+                                             'date': datetime.datetime.now().strftime('%H:%M')}))
+                except websockets.exceptions.ConnectionClosedError:
+                    ks.append(k)
+                except websockets.exceptions.ConnectionClosedOK:
+                    ks.append(k)
+
+            for i in ks:
+                wss.pop(i)
+
         elif data['type'] in ['change_color', 'drop_emoji']:
             for i in wss.values():
                 try:

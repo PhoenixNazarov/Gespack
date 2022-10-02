@@ -5,6 +5,7 @@ const smoothScroll = (element) => {
 }
 
 let socket = new WebSocket("wss://192.168.198.68:5000/");
+window.wss = socket;
 let my_name = '';
 let last_name = '';
 let chat_content = $('#chat-content');
@@ -49,6 +50,14 @@ socket.onmessage = function (event) {
         color_history.push([getScrollPosition(), data['color']]);
     } else if (data['type'] === 'drop_emoji') {
         drop_emoji(data['emoji']);
+    } else if (data['type'] === 'new_sticker') {
+        check_last_name(data['user']);
+        if (data['user'] !== my_name) {
+            add_sticker(data['sticker'], data['date']);
+        } else {
+            add_my_sticker(data['sticker'], data['date'])
+        }
+        max_scroll_height = getScrollPosition();
     }
 };
 
@@ -155,6 +164,41 @@ function add_voice(date) {
     );
     smoothScroll(chat_content);
 }
+
+
+function add_my_sticker(text, date) {
+    chat_content.append(
+        `
+          <div class="media media-chat media-chat-reverse">
+              <div class="media-body">
+                <p class="my-sticker">${text}</p>
+                <p class="meta">
+                  <time datetime="2018">${date}</time>
+                </p>
+              </div>
+          </div>
+          `
+    );
+    smoothScroll(chat_content);
+}
+
+function add_sticker(text, date) {
+    chat_content.append(
+        `
+          <div class="media media-chat">
+              <img class="avatar avatar-xs" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="...">
+              <div class="media-body">
+                <p class="my-sticker">${text}</p>
+                <p class="meta">
+                  <time datetime="2018">${date}</time>
+                </p>
+              </div>
+            </div>
+          `
+    );
+    smoothScroll(chat_content);
+}
+
 
 
 function playSound(uuid) {
